@@ -55,46 +55,46 @@ class UtnBot:
         self.driver.find_element(By.NAME, "_pass").send_keys(self.password, Keys.RETURN)
 
 
-class RollBot(UtnBot):
+class SurveyBot(UtnBot):
     ROLES = ("pa", "j2", "a1", "pt")
     DO_NOT_ANSWER_VALUE = "-1"
     STUDENT_QUESTIONS_ELEMENT = "p"
     STUDENT_QUESTIONS = 7
     TEACHER_QUESTIONS = 19
 
-    def complete_rolls(self):
+    def complete_surveys(self):
         self.login("autogestion")
         self.driver.get(
             f"http://encuesta.frm.utn.edu.ar/encuesta_materia/encuestamat.php?legajo={self.legajo}"
         )
         sleep(self.sleep_time)
         while True:
-            polls = self.driver.find_elements(By.NAME, "completar")
-            if not polls:
+            surveys = self.driver.find_elements(By.NAME, "completar")
+            if not surveys:
                 return
-            poll = polls[0]
-            poll.click()
+            survey = surveys[0]
+            survey.click()
             sleep(self.sleep_time)
-            self._complete_student_roll()
-            self._complete_teacher_roll()
-            self._send_roll()
+            self._complete_student_survey()
+            self._complete_teacher_survey()
+            self._send_survey()
             sleep(self.sleep_time)
 
-    def _complete_student_roll(self):
-        for i in range(1, RollBot.STUDENT_QUESTIONS + 1):
+    def _complete_student_survey(self):
+        for i in range(1, SurveyBot.STUDENT_QUESTIONS + 1):
             self.driver.find_element(
-                By.NAME, f"{RollBot.STUDENT_QUESTIONS_ELEMENT}{i}"
+                By.NAME, f"{SurveyBot.STUDENT_QUESTIONS_ELEMENT}{i}"
             ).click()
 
-    def _complete_teacher_roll(self):
+    def _complete_teacher_survey(self):
         availables_roles = [
-            role for role in RollBot.ROLES if self._does_role_exist(role)
+            role for role in SurveyBot.ROLES if self._does_role_exist(role)
         ]
         for role in availables_roles:
-            for i in range(1, RollBot.TEACHER_QUESTIONS + 1):
+            for i in range(1, SurveyBot.TEACHER_QUESTIONS + 1):
                 try:
                     select = Select(self.driver.find_element(By.NAME, f"{role}{i}"))
-                    select.select_by_value(RollBot.DO_NOT_ANSWER_VALUE)
+                    select.select_by_value(SurveyBot.DO_NOT_ANSWER_VALUE)
                 except Exception:
                     print(f"[ERROR] role {role}{i} does not exist")
 
@@ -105,5 +105,5 @@ class RollBot(UtnBot):
         except Exception:
             return False
 
-    def _send_roll(self):
+    def _send_survey(self):
         self.driver.find_element(By.NAME, "button2").click()

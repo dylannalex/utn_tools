@@ -30,8 +30,8 @@ def menu() -> None:
         _show_options()
         option = int(input("\n\n$ Enter option: "))
         if option == OPTIONS["complete polls"]:
-            roll_bot = bot.RollBot(username, password, legajo)
-            roll_bot.complete_rolls()
+            survey_bot = bot.SurveyBot(username, password, legajo)
+            survey_bot.complete_surveys()
 
         if option == OPTIONS["email"]:
             if not utn_bot:
