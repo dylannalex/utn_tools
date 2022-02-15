@@ -62,6 +62,10 @@ class SurveyBot(UtnBot):
     STUDENT_QUESTIONS = 7
     TEACHER_QUESTIONS = 19
 
+    def __init__(self, username, password, legajo):
+        super().__init__(username, password, legajo)
+        self.surveys_completed = 0
+
     def complete_surveys(self):
         self.login("autogestion")
         self.driver.get(
@@ -78,6 +82,7 @@ class SurveyBot(UtnBot):
             self._complete_student_survey()
             self._complete_teacher_survey()
             self._send_survey()
+            self.surveys_completed += 1
             sleep(self.sleep_time)
 
     def _complete_student_survey(self):
