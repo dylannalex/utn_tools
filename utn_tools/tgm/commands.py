@@ -40,7 +40,7 @@ def _complete_surveys(update, context, dni: int, password: str, legajo: int) -> 
 def parser(update, context) -> None:
     command = str(update.message.text).strip()
     username = update.effective_user["username"]
-    print(f"[STATUS] {username}: '{command}'")
+    print(f"[STATUS] {username} just ran a command.")
 
     if command.startswith(COMPLETE_SURVEYS_COMMAND_NAME + " "):
         _complete_surveys(update, context, *command.split(" ")[2:])
