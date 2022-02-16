@@ -14,7 +14,7 @@ def help(update, context) -> None:
     )
 
 
-def _complete_surveys(update, context, dni: int, password: str, legajo: int) -> int:
+def _complete_surveys(update, context, dni: int, legajo: int, password: str) -> int:
     survey_bot = bot.SurveyBot(dni, password, legajo, headless=True)
     try:
         username = update.effective_user["username"]
