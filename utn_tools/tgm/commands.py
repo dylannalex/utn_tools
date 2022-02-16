@@ -17,15 +17,15 @@ def help(update, context) -> None:
 def _complete_surveys(update, context, dni: int, password: str, legajo: int) -> int:
     survey_bot = bot.SurveyBot(dni, password, legajo, headless=True)
     try:
+        username = update.effective_user["username"]
         surveys_completed = survey_bot.complete_surveys()
         context.bot.sendMessage(
             chat_id=update.effective_user["id"],
             parse_mode="MarkdownV2",
             disable_web_page_preview=True,
-            text=text.get_surveys_completed_message(
-                update.effective_user["username"], surveys_completed
-            ),
+            text=text.get_surveys_completed_message(username, surveys_completed),
         )
+        print(f"[STATUS] {username} has completed {surveys_completed} surveys")
     except Exception:
         context.bot.sendMessage(
             chat_id=update.effective_user["id"],
@@ -39,6 +39,9 @@ def _complete_surveys(update, context, dni: int, password: str, legajo: int) -> 
 
 def parser(update, context) -> None:
     command = str(update.message.text).strip()
+    username = update.effective_user["username"]
+    print(f"[STATUS] {username}: '{command}'")
+
     if command.startswith(COMPLETE_SURVEYS_COMMAND_NAME + " "):
         _complete_surveys(update, context, *command.split(" ")[2:])
     else:
