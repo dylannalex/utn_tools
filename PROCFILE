@@ -1,0 +1,1 @@
+web: python -m utn_tools.tgm
