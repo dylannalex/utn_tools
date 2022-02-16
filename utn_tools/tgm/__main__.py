@@ -18,10 +18,10 @@ elif settings.MODE == "deploy":
     # Heroku access
     def run(updater):
         updater.start_webhook(
-            listen="0.0.0.0", port=settings.PORT, url_path=settings.TOKEN
-        )
-        updater.bot.set_webhook(
-            f"https://{settings.HEROKU_APP_NAME}.herokuapp.com/{settings.TOKEN}"
+            listen="0.0.0.0",
+            port=settings.PORT,
+            url_path=settings.TOKEN,
+            webhook_url=f"https://{settings.HEROKU_APP_NAME}.herokuapp.com/{settings.TOKEN}",
         )
 
 
