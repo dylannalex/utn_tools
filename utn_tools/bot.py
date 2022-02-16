@@ -11,7 +11,7 @@ from time import sleep
 class UtnBot:
     LOGIN_WEBSITES = ("autogestion", "email")
 
-    def __init__(self, username, password, legajo) -> None:
+    def __init__(self, username, password, legajo, headless=False) -> None:
         self.username = username
         self.password = password
         self.legajo = legajo
@@ -21,6 +21,10 @@ class UtnBot:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
+        if headless:
+            options.add_argument("--headless")
+        if settings.GOOGLE_CHROME_BIN:
+            options.binary_location = settings.GOOGLE_CHROME_BIN
         self.driver = webdriver.Chrome(
             executable_path=settings.CHROMEDRIVER_PATH, options=options
         )
@@ -62,8 +66,8 @@ class SurveyBot(UtnBot):
     STUDENT_QUESTIONS = 7
     TEACHER_QUESTIONS = 19
 
-    def __init__(self, username, password, legajo):
-        super().__init__(username, password, legajo)
+    def __init__(self, username, password, legajo, headless=True):
+        super().__init__(username, password, legajo, headless)
         self.surveys_completed = 0
 
     def complete_surveys(self):
