@@ -1,5 +1,6 @@
 from utn_tools import bot
 from utn_tools.tgm import text
+from utn_tools.tgm import settings
 
 
 COMPLETE_SURVEYS_COMMAND_NAME = "completar encuestas"
@@ -15,7 +16,13 @@ def help(update, context) -> None:
 
 
 def _complete_surveys(update, context, dni: int, legajo: int, password: str) -> int:
-    survey_bot = bot.SurveyBot(dni, password, legajo, headless=True)
+    survey_bot = bot.SurveyBot(
+        dni,
+        password,
+        legajo,
+        headless=True,
+        show_exceptions=settings.SHOW_SURVEY_EXCEPTIONS,
+    )
     try:
         username = update.effective_user["username"]
         surveys_completed = survey_bot.complete_surveys()
@@ -41,7 +48,6 @@ def parser(update, context) -> None:
     command = str(update.message.text).strip()
     username = update.effective_user["username"]
     print(f"[STATUS] {username} just ran a command.")
-
     if command.startswith(COMPLETE_SURVEYS_COMMAND_NAME + " "):
         _complete_surveys(update, context, *command.split(" ")[2:])
     else:

@@ -66,9 +66,12 @@ class SurveyBot(UtnBot):
     STUDENT_QUESTIONS = 7
     TEACHER_QUESTIONS = 19
 
-    def __init__(self, username, password, legajo, headless=True):
+    def __init__(
+        self, username, password, legajo, headless=True, show_exceptions=False
+    ):
         super().__init__(username, password, legajo, headless)
         self.surveys_completed = 0
+        self.show_exceptions = show_exceptions
 
     def complete_surveys(self):
         self.login("autogestion")
@@ -105,7 +108,8 @@ class SurveyBot(UtnBot):
                     select = Select(self.driver.find_element(By.NAME, f"{role}{i}"))
                     select.select_by_value(SurveyBot.DO_NOT_ANSWER_VALUE)
                 except Exception:
-                    print(f"[ERROR] role {role}{i} does not exist")
+                    if self.show_exceptions:
+                        print(f"[WARNING] role {role}{i} does not exist")
 
     def _does_role_exist(self, role):
         try:
