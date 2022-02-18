@@ -60,7 +60,7 @@ class UtnBot:
 
 
 class SurveyBot(UtnBot):
-    ROLES = ("pa", "j2", "a1", "pt")
+    ROLES = ("pa", "j2", "j1", "a1", "pt")
     DO_NOT_ANSWER_VALUE = "-1"
     STUDENT_QUESTIONS_ELEMENT = "p"
     STUDENT_QUESTIONS = 7
